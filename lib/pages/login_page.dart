@@ -32,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
         Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (BuildContext context) => IntroPage(),
+              builder: (_) => IntroPage(),
             ));
       } else {
         errorSnackBar(context, 'INGRESE LOS DATOS CORRECTOS');

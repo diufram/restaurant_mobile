@@ -1,13 +1,11 @@
 import 'package:e_comerce/components/button_intro.dart';
 import 'package:e_comerce/models/carrito.dart';
-
 import 'package:e_comerce/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import 'package:provider/provider.dart';
-
 import '../components/comida_title.dart';
+import '../data/respositories/compras_respository.dart';
 import 'dealles_producto_page.dart';
 
 class MenuPage extends StatefulWidget {
@@ -18,28 +16,21 @@ class MenuPage extends StatefulWidget {
 }
 
 class _MenuPageState extends State<MenuPage> {
-  // MENU DE COMIDAS
-  /*List menuComidas = [
-    // MAJADITO
-    Producto(
-        nombre: "Majadito",
-        precio: 30.0,
-        imagenPath: 'lib/images/majadito.png',
-        descripcion: "Este es un plato tradicional de santa cruz"),
-    // PICANTE DE POLLO
-    Producto(
-        nombre: "Picante",
-        precio: 50.0,
-        imagenPath: 'lib/images/picante.png',
-        descripcion: "Es un plato tradicional de cochabamba")
-  ];*/
-
-  //
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<Carrito>(context, listen: false).getMenu();
+    });
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<Compra>(context, listen: false).getCompras();
+    });
+    super.initState();
+  }
 
   // NAVEGADOR AL ITEM DE LA COMIDA
   void irDetallesComida(int index) {
     final carrito = context.read<Carrito>();
-    final menuComidas = carrito.menuComidas;
+    final menuComidas = carrito.menu;
 
     Navigator.push(
         context,
@@ -51,9 +42,6 @@ class _MenuPageState extends State<MenuPage> {
 
   @override
   Widget build(BuildContext context) {
-    final carrito = context.read<Carrito>();
-    final menuComidas = carrito.menuComidas;
-
     return Scaffold(
       backgroundColor: Colors.grey[300],
       appBar: AppBar(
@@ -62,7 +50,7 @@ class _MenuPageState extends State<MenuPage> {
         elevation: 0,
         leading: Builder(
           builder: (context) => IconButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.menu,
             ),
             onPressed: () {
@@ -128,6 +116,40 @@ class _MenuPageState extends State<MenuPage> {
                   style: TextStyle(color: Colors.white),
                 ),
               ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 25.0),
+              child: ListTile(
+                  leading: const Icon(
+                    Icons.shop,
+                    color: Colors.white,
+                  ),
+                  title: const Text(
+                    'Compras',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.pushNamed(context, '/compraspage');
+                  }),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 25.0),
+              child: ListTile(
+                  leading: const Icon(
+                    Icons.calendar_today,
+                    color: Colors.white,
+                  ),
+                  title: const Text(
+                    'Reserva',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.pushNamed(context, '/reservapage');
+                  }),
             )
           ],
         ),
@@ -223,18 +245,26 @@ class _MenuPageState extends State<MenuPage> {
                 ),
 
                 SizedBox(
-                  width: MediaQuery.of(context).size.width - 30,
-                  height: 250,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: menuComidas.length,
-                    itemBuilder: (context, index) => ComidaTitulo(
-                      comida: menuComidas[index],
-                      onTap: () => irDetallesComida(index),
-                    ),
-                  ),
-                ),
-
+                    width: MediaQuery.of(context).size.width - 30,
+                    height: 250,
+                    child: Consumer<Carrito>(
+                      builder: (context, value, child) {
+                        if (value.isLoading) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                        final menu = value.menu;
+                        return ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: menu.length,
+                          itemBuilder: (context, index) => ComidaTitulo(
+                            comida: menu[index],
+                            onTap: () => irDetallesComida(index),
+                          ),
+                        );
+                      },
+                    )),
                 const SizedBox(
                   height: 25,
                 ),

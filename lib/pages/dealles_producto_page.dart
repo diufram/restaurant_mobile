@@ -1,13 +1,14 @@
 import 'package:e_comerce/components/button_intro.dart';
 import 'package:e_comerce/models/carrito.dart';
-import 'package:e_comerce/models/producto.dart';
 import 'package:e_comerce/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
+import '../models/product.dart';
+
 class DetallesComida extends StatefulWidget {
-  final Producto comida;
+  final Product comida;
   const DetallesComida({super.key, required this.comida});
 
   @override
@@ -39,8 +40,16 @@ class _DetallesComidaState extends State<DetallesComida> {
     if (contadorCantidad > 0) {
       // ACCEDER AL CARRITO
       final carrito = context.read<Carrito>();
-      // AÑADIR AL CARRITO
-      carrito.agregarACarrito(widget.comida, contadorCantidad);
+
+      if (carrito.carrito.contains(widget.comida)) {
+        int pos = carrito.pos(carrito.carrito, widget.comida);
+        Product p = carrito.carrito[pos];
+        p.setCantidad(contadorCantidad);
+      } else {
+        // AÑADIR AL CARRITO
+        carrito.agregarACarrito(widget.comida, contadorCantidad);
+      }
+
       // INFORMAR QUE SE AÑADIO AL CARRITO
       showDialog(
         context: context,
@@ -87,7 +96,7 @@ class _DetallesComidaState extends State<DetallesComida> {
             children: [
               // IMAGEN
               Image.asset(
-                widget.comida.imagenPath,
+                widget.comida.imagen,
                 height: 300,
               ),
 

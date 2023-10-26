@@ -1,10 +1,10 @@
-import 'package:e_comerce/models/producto.dart';
+import 'package:e_comerce/models/product.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ComidaTitulo extends StatelessWidget {
   final void Function()? onTap;
-  final Producto comida;
+  final Product comida;
   const ComidaTitulo({super.key, required this.comida, required this.onTap});
 
   @override
@@ -25,7 +25,7 @@ class ComidaTitulo extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Image.asset(
-              comida.imagenPath,
+              comida.imagen,
               height: 120,
             ),
 

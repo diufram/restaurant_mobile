@@ -1,40 +1,77 @@
-import 'package:e_comerce/models/producto.dart';
+import 'dart:convert';
+import 'package:e_comerce/models/product.dart';
+import 'package:e_comerce/services/globals.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class Carrito extends ChangeNotifier {
-  final List<Producto> _menuComidas = [
-    // MAJADITO
-    Producto(
-        nombre: "Majadito",
-        precio: 30.0,
-        imagenPath: 'lib/images/majadito.png',
-        descripcion: "Este es un plato tradicional de santa cruz"),
-    // PICANTE DE POLLO
-    Producto(
-        nombre: "Picante",
-        precio: 50.0,
-        imagenPath: 'lib/images/picante.png',
-        descripcion: "Es un plato tradicional de cochabamba")
-  ];
+  List<Product> _menu = [];
 
-  List<Producto> _carrito = [];
+  List<Product> _carrito = [];
+  double _total = 0;
 
-  List<Producto> get menuComidas => _menuComidas;
+  List<Product> get menu => _menu;
 
-  List<Producto> get carrito => _carrito;
+  List<Product> get carrito => _carrito;
 
-  // AGREGAR AL CARRITO
+  bool isLoading = true;
 
-  void agregarACarrito(Producto comidaItem, int cantidad) {
-    for (int i = 0; i < cantidad; i++) {
-      _carrito.add(comidaItem);
-    }
+  getMenu() async {
+    var url = Uri.parse(baseURL + 'productos');
+    final response = await http.get(url, headers: headers);
+    _menu = productoFromJson(response.body);
+    isLoading = false;
     notifyListeners();
   }
 
+  double getTotal() {
+    double total = 0;
+    for (var i = 0; i < carrito.length; i++) {
+      total += double.parse(carrito[i].precio) * carrito[i].cantidad;
+    }
+    _total = total;
+    notifyListeners();
+    return _total;
+  }
+
+  // AGREGAR AL CARRITO
+
+  void agregarACarrito(Product comidaItem, int cantidad) {
+    comidaItem.setCantidad(cantidad);
+    _carrito.add(comidaItem);
+
+    notifyListeners();
+  }
+
+  int pos(List<Product> carrito, Product producto) {
+    int pos = 0;
+    for (var i = 0; i < carrito.length; i++) {
+      if (carrito[i] == producto) pos = i;
+    }
+    notifyListeners();
+    return pos;
+  }
+
   // REMOVER DEL CARRITO
-  void removerDCarrito(Producto comidaItem) {
+  void removerDCarrito(Product comidaItem) {
+    comidaItem.cantidad = 0;
     _carrito.remove(comidaItem);
+    _total = _total - comidaItem.cantidad * double.parse(comidaItem.precio);
+    notifyListeners();
+  }
+
+  Future<void> pay() async {
+    if (_carrito.isEmpty) return;
+    Map data = {"productos": _carrito, "total": getTotal()};
+
+    var body = jsonEncode(data);
+    var url = Uri.parse(baseURL + 'pedido');
+    await http.post(
+      url,
+      headers: headers,
+      body: body,
+    );
+    _carrito = [];
     notifyListeners();
   }
 }
