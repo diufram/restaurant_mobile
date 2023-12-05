@@ -1,18 +1,17 @@
 import 'package:e_comerce/components/button_intro.dart';
-import 'package:e_comerce/models/carrito.dart';
-import 'package:e_comerce/pages/detalles_pedido_page.dart';
+import 'package:e_comerce/domain/models/carrito.dart';
+import 'package:e_comerce/ui/pages/detalles_pedido_page.dart';
 import 'package:e_comerce/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/product.dart';
+import '../../domain/models/product.dart';
 
 class CarritoPage extends StatelessWidget {
   const CarritoPage({super.key});
 
   void removerDCarrito(Product comida, BuildContext context) {
     final carrito = context.read<Carrito>();
-
     carrito.removerDCarrito(comida);
   }
 

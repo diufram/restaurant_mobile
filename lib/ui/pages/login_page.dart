@@ -1,14 +1,10 @@
-import 'dart:convert';
-
 import 'package:e_comerce/components/button.dart';
 import 'package:e_comerce/components/text_field.dart';
-
-import 'package:e_comerce/pages/intro_page.dart';
+import 'package:e_comerce/ui/pages/intro_page.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
-import '../auth/login_or_register.dart';
-import '../services/globals.dart';
+import '../../auth/login_or_register.dart';
+import '../../services/globals.dart';
 
 class LoginPage extends StatefulWidget {
   final Function()? onTap;
@@ -28,7 +24,6 @@ class _LoginPageState extends State<LoginPage> {
           emailTextController.text, passwordTextController.text);
 
       if (response.statusCode == 200) {
-        Map responseMap = jsonDecode(response.body);
         Navigator.push(
             context,
             MaterialPageRoute(
@@ -87,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(
                     height: 25,
                   ),
-                  // BOTON DE INICIO
+                  // BOTON DE INICIO DE SESSION
                   MyButton(onTap: iniciarSession, text: 'Iniciar Session'),
                   const SizedBox(
                     height: 15,

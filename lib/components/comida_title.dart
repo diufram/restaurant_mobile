@@ -1,4 +1,4 @@
-import 'package:e_comerce/models/product.dart';
+import 'package:e_comerce/domain/models/product.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -24,8 +24,8 @@ class ComidaTitulo extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Image.asset(
-              comida.imagen,
+            Image.network(
+              "http://192.168.0.10:8000/" + comida.imagen,
               height: 120,
             ),
 

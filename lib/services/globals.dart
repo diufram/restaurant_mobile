@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const String baseURL = "https://oyster-app-b6ezi.ondigitalocean.app/api/";
+const String baseURL = "http://3.144.236.115/api/";
 const Map<String, String> headers = {"Content-Type": "application/json"};
 
 errorSnackBar(BuildContext context, String text) {

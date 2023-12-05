@@ -1,6 +1,7 @@
-import 'package:e_comerce/models/compras.dart';
+import 'package:e_comerce/data/respositories/local_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import '../../domain/models/compras.dart';
 import '../../services/globals.dart';
 
 class Compra extends ChangeNotifier {
@@ -10,9 +11,13 @@ class Compra extends ChangeNotifier {
 
   getCompras() async {
     const url1 = baseURL + 'compras';
-    print(url1);
+    final token = await LocalStorage().getUserToken();
+    Map<String, String> header = {
+      "Accept": "application/json",
+      "Authorization": "Bearer $token"
+    };
     final url = Uri.parse(url1);
-    final response = await http.get(url, headers: headers);
+    final response = await http.get(url, headers: header);
     _compras = comprasFromJson(response.body);
     notifyListeners();
   }

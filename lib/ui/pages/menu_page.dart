@@ -1,12 +1,16 @@
 import 'package:e_comerce/components/button_intro.dart';
-import 'package:e_comerce/models/carrito.dart';
+import 'package:e_comerce/data/respositories/local_repository.dart';
+import 'package:e_comerce/domain/models/carrito.dart';
+import 'package:e_comerce/domain/models/reserva.dart';
 import 'package:e_comerce/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import '../components/comida_title.dart';
-import '../data/respositories/compras_respository.dart';
+import '../../components/comida_title.dart';
+import '../../data/respositories/compra_repository.dart';
+import '../../services/globals.dart';
 import 'dealles_producto_page.dart';
+import 'package:http/http.dart' as http;
 
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
@@ -24,7 +28,28 @@ class _MenuPageState extends State<MenuPage> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<Compra>(context, listen: false).getCompras();
     });
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<Reserva>(context, listen: false).getReservas();
+    });
     super.initState();
+  }
+
+  void logout() async {
+    var url = Uri.parse(baseURL + 'logout');
+    final token = await LocalStorage().getUserToken();
+    Map<String, String> header = {
+      "Accept": "application/json",
+      "Authorization": "Bearer $token"
+    };
+    await http.get(
+      url,
+      headers: header,
+    );
+    print(await LocalStorage().getUserToken());
+    await LocalStorage().removeToken();
+    print(await LocalStorage().getUserToken());
+    Future.delayed(Duration(seconds: 2));
+    Navigator.pushNamed(context, '/loginregister');
   }
 
   // NAVEGADOR AL ITEM DE LA COMIDA
@@ -88,23 +113,7 @@ class _MenuPageState extends State<MenuPage> {
             ),
 
             //OTRAS PAGINAS
-
-            const Padding(
-              padding: EdgeInsets.only(left: 25.0),
-              child: ListTile(
-                leading: Icon(
-                  Icons.home,
-                  color: Colors.white,
-                ),
-                title: Text(
-                  'Home',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
-
-            //
-            const Padding(
+            Padding(
               padding: EdgeInsets.only(left: 25.0),
               child: ListTile(
                 leading: Icon(
@@ -115,6 +124,7 @@ class _MenuPageState extends State<MenuPage> {
                   'Logout',
                   style: TextStyle(color: Colors.white),
                 ),
+                onTap: logout,
               ),
             ),
             Padding(

@@ -5,6 +5,14 @@ import 'package:google_fonts/google_fonts.dart';
 
 class IntroPage extends StatelessWidget {
   const IntroPage({super.key});
+  /*static Widget init(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: null,
+      builder: (_, __) => IntroPage._(),
+    );
+  }
+*/
+
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +67,6 @@ class IntroPage extends StatelessWidget {
               MyButtonI(
                 text: "COMERZAR ",
                 onTap: () {
-                  // IR A AL MENU
                   Navigator.pushNamed(context, '/menupage');
                 },
               )

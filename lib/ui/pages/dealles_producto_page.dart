@@ -1,11 +1,11 @@
 import 'package:e_comerce/components/button_intro.dart';
-import 'package:e_comerce/models/carrito.dart';
+import 'package:e_comerce/domain/models/carrito.dart';
 import 'package:e_comerce/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-import '../models/product.dart';
+import '../../domain/models/product.dart';
 
 class DetallesComida extends StatefulWidget {
   final Product comida;
@@ -95,8 +95,8 @@ class _DetallesComidaState extends State<DetallesComida> {
           child: ListView(
             children: [
               // IMAGEN
-              Image.asset(
-                widget.comida.imagen,
+              Image.network(
+                "http://192.168.0.10:8000/" + widget.comida.imagen,
                 height: 300,
               ),
 

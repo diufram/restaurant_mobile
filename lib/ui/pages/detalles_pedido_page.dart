@@ -1,10 +1,10 @@
 import 'package:e_comerce/components/button_intro.dart';
-import 'package:e_comerce/models/carrito.dart';
-import 'package:e_comerce/pages/menu_page.dart';
+import 'package:e_comerce/domain/models/carrito.dart';
+import 'package:e_comerce/ui/pages/menu_page.dart';
 import 'package:e_comerce/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../models/product.dart';
+import '../../domain/models/product.dart';
 
 class DetallesPageCarrito extends StatelessWidget {
   const DetallesPageCarrito({super.key});

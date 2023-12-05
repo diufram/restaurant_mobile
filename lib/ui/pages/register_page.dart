@@ -1,15 +1,11 @@
-import 'dart:convert';
-
-import 'package:e_comerce/pages/intro_page.dart';
+import 'package:e_comerce/ui/pages/intro_page.dart';
 import 'package:flutter/material.dart';
-
-import '../auth/login_or_register.dart';
-import '../components/button.dart';
-import '../components/text_field.dart';
-
+import '../../auth/login_or_register.dart';
+import '../../components/button.dart';
+import '../../components/text_field.dart';
 import 'package:http/http.dart' as http;
 
-import '../services/globals.dart';
+import '../../services/globals.dart';
 
 class RegisterPage extends StatefulWidget {
   final Function()? onTap;
@@ -42,7 +38,6 @@ class _RegisterPageState extends State<RegisterPage> {
           edadController.text);
 
       if (response.statusCode == 200) {
-        Map responseMap = jsonDecode(response.body);
         Navigator.push(
             context,
             MaterialPageRoute(
